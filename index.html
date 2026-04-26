@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>🎂 Shivadath's 15th Birthday | Best Friend Celebration</title>
+  <!-- Google Fonts for Premium Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+  <!-- GSAP for advanced animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* cleaner for interactive but text selectable */
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 10% 20%, rgb(255, 200, 150), rgb(255, 100, 100), rgb(220, 60, 90));
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    /* animated gradient overlay for extra glimmer */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 215, 150, 0.25), rgba(0,0,0,0.1));
+      pointer-events: none;
+      z-index: 0;
+      animation: pulseGlow 8s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.4; }
+      100% { opacity: 0.9; }
+    }
+
+    /* Floating balloons & particles */
+    .floating-baloons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -120px;
+      width: 45px;
+      height: 55px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,200,0.9), rgba(255,120,160,0.9));
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+      animation: floatUp 12s linear infinite;
+      opacity: 0.7;
+      z-index: 0;
+    }
+    .balloon::after {
+      content: '🎈';
+      position: absolute;
+      font-size: 28px;
+      top: 5px;
+      left: 8px;
+      opacity: 0.8;
+    }
+    .balloon::before {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      width: 2px;
+      height: 18px;
+      background: #5a3e2e;
+      transform: translateX(-50%);
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.5;
+      }
+      70% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(12deg);
+        opacity: 0;
+      }
+    }
+
+    /* random star sparkles */
+    .sparkle {
+      position: fixed;
+      background: radial-gradient(circle, #fffbc2, gold);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+      animation: twinkle 3s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0; transform: scale(0.5);}
+      100% { opacity: 1; transform: scale(1.2);}
+    }
+
+    /* MAIN CARD - glassmorphism + tilt 3D */
+    .birthday-card {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+      width: 100%;
+      background: rgba(255, 250, 240, 0.88);
+      backdrop-filter: blur(12px);
+      border-radius: 64px 48px 64px 48px;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255,215,150,0.6), inset 0 1px 3px rgba(255,255,245,0.8);
+      padding: 2.5rem 2rem;
+      transition: transform 0.1s ease-out;
+      text-align: center;
+      border: 1px solid rgba(255, 245, 200, 0.7);
+    }
+
+    /* decorative confetti ribbon effect */
+    .confetti-ribbon {
+      position: absolute;
+      top: -12px;
+      left: 5%;
+      width: 90%;
+      height: 6px;
+      background: linear-gradient(90deg, gold, crimson, #ffb347, gold);
+      border-radius: 10px;
+      z-index: 20;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.6rem;
+      background: linear-gradient(135deg, #D43F1A, #FFB347, #FFE55C);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .age-glow {
+      font-size: 5.2rem;
+      font-weight: 800;
+      background: linear-gradient(145deg, #e25822, #ffcc00);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-block;
+      line-height: 1;
+      margin: 0.25rem 0;
+      text-shadow: 0 0 20px rgba(255,200,0,0.6);
+      letter-spacing: 6px;
+    }
+
+    .shivadath-name {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #2c1810;
+      background: linear-gradient(120deg, #b85c1a, #9b3a0a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 3px 3px 12px rgba(220, 100, 20, 0.3);
+      margin-bottom: 16px;
+      display: inline-block;
+      border-bottom: 3px dotted #ffaa55;
+      padding-bottom: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #ffd966d9;
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-weight: 700;
+      color: #a33f00;
+      margin: 12px 0;
+      font-size: 1.2rem;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .message-box {
+      background: rgba(255, 235, 205, 0.6);
+      padding: 1.6rem;
+      border-radius: 40px;
+      margin: 28px 0;
+      font-size: 1.2rem;
+      line-height: 1.5;
+      font-weight: 500;
+      color: #2d2b26;
+      border-left: 6px solid #f7b05e;
+      border-right: 2px solid #ffcf9a;
+      transition: all 0.3s;
+    }
+
+    .friend-note {
+      font-style: italic;
+      font-weight: 600;
+      background: #fff2e0;
+      border-radius: 28px;
+      padding: 18px;
+      font-size: 1.1rem;
+      margin: 1rem 0 1.5rem;
+      box-shadow: 0 8px 14px rgba(0,0,0,0.05);
+      color: #5c2e0e;
+    }
+
+    .celeb-btn {
+      background: linear-gradient(115deg, #ffa34d, #ff5e3a);
+      border: none;
+      padding: 16px 32px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+      margin: 18px 0 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .celeb-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 18px 30px rgba(0,0,0,0.3);
+      background: linear-gradient(115deg, #ffb45e, #ff7044);
+    }
+
+    .signature {
+      margin-top: 32px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #a04217;
+      border-top: 2px dashed #ffb76e;
+      padding-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .birthday-card {
+        padding: 1.8rem 1.2rem;
+      }
+      h1 {
+        font-size: 2.4rem;
+      }
+      .shivadath-name {
+        font-size: 2.3rem;
+      }
+      .age-glow {
+        font-size: 3.5rem;
+        letter-spacing: 2px;
+      }
+      .message-box {
+        font-size: 1rem;
+      }
+      .celeb-btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
+
+    /* small interactive 15 years badge bounce */
+    .rotating-15 {
+      display: inline-block;
+      margin: 5px 0;
+      animation: pulseSpin 1.6s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseSpin {
+      0% { transform: rotate(0deg) scale(1); text-shadow: 0 0 0px gold;}
+      100% { transform: rotate(8deg) scale(1.1); text-shadow: 0 0 18px #ffcc66;}
+    }
+
+    /* custom mouse trail class not necessary, but adding a tiny shimmer */
+    .glow-text {
+      font-weight: 800;
+    }
+
+    footer {
+      font-size: 0.8rem;
+      margin-top: 20px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+<!-- floating decorations: balloons, sparkles (dynamically added) -->
+<div class="floating-baloons" id="balloonContainer"></div>
+
+<!-- main birthday card with tilt effect -->
+<div class="birthday-card" id="birthdayCard">
+  <div class="confetti-ribbon"></div>
+  <h1>🎉 HAPPY 15th BIRTHDAY 🎉</h1>
+  <div class="shivadath-name">✨ SHIVADATH ✨</div>
+  <div>
+    <span class="age-glow rotating-15">🎂 15 🎂</span>
+  </div>
+  <div class="badge">🔥 LEVEL 15 UNLOCKED 🔥</div>
+
+  <div class="message-box">
+    🎈 To my absolute best friend, Shivadath! 🎈<br>
+    You have been there for me whenewer there is a problem. You filled my days with llaughter and happiness
+    even When im down. You made my  days brighter. You helped me be the real <strong>ME</strong>.
+    I thank You for being my Tech buddy and a partner in crime for various adventures.
+     I wish you all the best for your 15th year, may it be filled with epic wins, 
+     unforgettable moments, and endless joy! 🎂🎉.
+  </div>
+
+  <div class="friend-note">
+    🌟 "Shivadath, you’re the kind of friend everyone dreams of — loyal, hilarious, and pure-hearted. 
+    May your 15th year be filled with crazy wins, unlimited joy, and all the cake you can eat!" 🌟<br>
+    <span style="font-size: 0.9rem; display: block; margin-top: 10px;">❤️ From your ride-or-die best friend ❤️</span>
+  </div>
+
+  <button class="celeb-btn" id="celebrateBtn">
+    🎊 BURST CONFETTI 🎊
+  </button>
+  <div class="signature">
+    <span>✨ 15 candles of awesomeness ✨</span>
+    <span>🎁 Best friends forever 🎁</span>
+  </div>
+  <footer>🎂 Today is YOUR day, Shivadath! 🎂</footer>
+</div>
+
+<script>
+  // ---------- CREATE FLOATING BALLOONS (15 balloons for 15th birthday!) ----------
+  const balloonContainer = document.getElementById('balloonContainer');
+  const balloonColors = ['#ffadad', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#bdb2ff', '#ffc6ff', '#fbbf24', '#f97316', '#ef4444', '#ec4899', '#d946ef', '#8b5cf6', '#14b8a6'];
+  
+  function createBalloon() {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+    const size = 40 + Math.random() * 25;
+    balloon.style.width = `${size}px`;
+    balloon.style.height = `${size * 1.2}px`;
+    balloon.style.left = `${Math.random() * 100}%`;
+    balloon.style.animationDuration = `${8 + Math.random() * 8}s`;
+    balloon.style.animationDelay = `${Math.random() * 5}s`;
+    const randomColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+    balloon.style.background = `radial-gradient(circle at 30% 30%, ${randomColor}, ${adjustBrightness(randomColor, -30)})`;
+    balloonContainer.appendChild(balloon);
+    
+    // remove after animation ends to avoid garbage
+    balloon.addEventListener('animationend', () => {
+      balloon.remove();
+    });
+  }
+  
+  function adjustBrightness(hex, percent) {
+    // simple brightness adjustment for gradient
+    return hex;
+  }
+  
+  // generate 25 balloons initially and then periodic for continuous effect
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => createBalloon(), i * 300);
+  }
+  setInterval(() => {
+    createBalloon();
+  }, 2800);
+  
+  // ------- SPARKLE PARTICLES (Advanced starry vibe) -------
+  function createSparkle() {
+    const spark = document.createElement('div');
+    spark.classList.add('sparkle');
+    spark.style.left = Math.random() * window.innerWidth + 'px';
+    spark.style.top = Math.random() * window.innerHeight + 'px';
+    spark.style.width = spark.style.height = 2 + Math.random() * 6 + 'px';
+    spark.style.animationDuration = 1 + Math.random() * 2 + 's';
+    document.body.appendChild(spark);
+    setTimeout(() => spark.remove(), 2800);
+  }
+  setInterval(createSparkle, 500);
+  for (let i=0; i<50; i++) setTimeout(createSparkle, i*120);
+  
+  // ---------- ADVANCED 3D TILT EFFECT ON CARD ----------
+  const card = document.getElementById('birthdayCard');
+  let mouseX = 0, mouseY = 0;
+  let cardX = 0, cardY = 0;
+  
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const deltaX = (e.clientX - centerX) / (rect.width / 2);
+    const deltaY = (e.clientY - centerY) / (rect.height / 2);
+    const maxRotate = 12;
+    const rotateY = deltaX * maxRotate;
+    const rotateX = -deltaY * maxRotate;
+    card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+  });
+  
+  // ---------- GSAP ADVANCED ENTRY ANIMATIONS ----------
+  gsap.fromTo('.birthday-card', 
+    { opacity: 0, y: 60, scale: 0.92 },
+    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.5)", delay: 0.2 }
+  );
+  gsap.fromTo('h1', 
+    { scale: 0.8, opacity: 0, rotationZ: -5 },
+    { scale: 1, opacity: 1, rotationZ: 0, duration: 0.9, delay: 0.3, ease: "back.out(1.2)" }
+  );
+  gsap.fromTo('.shivadath-name', 
+    { letterSpacing: '-8px', opacity: 0, x: -30 },
+    { letterSpacing: 'normal', opacity: 1, x: 0, duration: 0.8, delay: 0.45, ease: "power3.out" }
+  );
+  gsap.fromTo('.age-glow', 
+    { scale: 0.2, opacity: 0, rotation: 180 },
+    { scale: 1, opacity: 1, rotation: 0, duration: 1, delay: 0.6, ease: "bounce.out" }
+  );
+  gsap.fromTo('.message-box', 
+    { y: 30, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.8, delay: 0.8, ease: "power2.out" }
+  );
+  gsap.fromTo('.friend-note', 
+    { x: -40, opacity: 0, skewX: 5 },
+    { x: 0, opacity: 1, skewX: 0, duration: 0.7, delay: 1.0, ease: "back.out(0.8)" }
+  );
+  gsap.fromTo('.celeb-btn', 
+    { scale: 0.8, y: 20, opacity: 0 },
+    { scale: 1, y: 0, opacity: 1, duration: 0.8, delay: 1.2, ease: "elastic.out(1, 0.4)" }
+  );
+  
+  // ---------- CONFETTI BURST FUNCTION (advanced) ----------
+  function fireConfetti(heavy = false) {
+    canvasConfetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, startVelocity: 15, colors: ['#ffbb44', '#ff6644', '#ffaa33', '#ff85c1'] });
+    canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.4, x: 0.2 }, startVelocity: 20, colors: ['#38bdf8', '#ffcc33', '#ff66aa'] });
+    canvasConfetti({ particleCount: 100, spread: 100, origin: { y: 0.4, x: 0.8 }, startVelocity: 20 });
+    if (heavy) {
+      canvasConfetti({ particleCount: 300, spread: 120, origin: { y: 0.5 }, startVelocity: 25, deceleration: 0.98, colors: ['#ffd966', '#ff8855', '#f4a261', '#e9c46a'] });
+      setTimeout(() => {
+        canvasConfetti({ particleCount: 400, spread: 70, origin: { y: 0.7 }, startVelocity: 18, ticks: 200 });
+      }, 150);
+    }
+    // special cannon effect
+    for (let i=0;i<5;i++) {
+      setTimeout(() => {
+        canvasConfetti({ particleCount: 60, angle: 60 + i*10, spread: 45, origin: { x: 0.2, y: 0.7 }, startVelocity: 18 });
+        canvasConfetti({ particleCount: 60, angle: 110 - i*8, spread: 45, origin: { x: 0.8, y: 0.7 }, startVelocity: 18 });
+      }, i*70);
+    }
+  }
+  
+  // Initial mega burst + extra to celebrate 15th birthday
+  window.addEventListener('load', () => {
+    fireConfetti(true);
+    // give second burst after few ms
+    setTimeout(() => {
+      fireConfetti(true);
+      canvasConfetti({ particleCount: 180, spread: 100, origin: { y: 0.3 }, startVelocity: 22 });
+    }, 700);
+    setTimeout(() => {
+      canvasConfetti({ particleCount: 400, spread: 120, origin: { y: 0.5, x: 0.5 }, startVelocity: 28, gravity: 1.2 });
+    }, 1300);
+    
+    // special floating message alert: subtle
+    gsap.to('.badge', { scale: 1.1, repeat: 3, yoyo: true, duration: 0.4, delay: 1.5 });
+  });
+  
+  // Button: extra confetti blast
+  const btn = document.getElementById('celebrateBtn');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    fireConfetti(true);
+    // additional heart particle effect simulation: using big burst
+    canvasConfetti({ particleCount: 250, spread: 85, origin: { y: 0.5 }, startVelocity: 22, colors: ['#ffb347', '#ff6b6b', '#f7d44a'] });
+    // add temp glitch on button for excitement
+    btn.style.transform = 'scale(0.97)';
+    setTimeout(() => { btn.style.transform = ''; }, 150);
+    
+    // Show an extra animated tooltip (optional toast for fun)
+    const toastMsg = document.createElement('div');
+    toastMsg.innerText = '🎉✨ HAPPY 15TH SHIVADATH! ✨🎉';
+    toastMsg.style.position = 'fixed';
+    toastMsg.style.bottom = '20px';
+    toastMsg.style.left = '50%';
+    toastMsg.style.transform = 'translateX(-50%)';
+    toastMsg.style.background = 'rgba(0,0,0,0.75)';
+    toastMsg.style.backdropFilter = 'blur(12px)';
+    toastMsg.style.color = '#FFDEAD';
+    toastMsg.style.padding = '12px 26px';
+    toastMsg.style.borderRadius = '50px';
+    toastMsg.style.fontWeight = 'bold';
+    toastMsg.style.zIndex = '999';
+    toastMsg.style.fontSize = '1.2rem';
+    toastMsg.style.border = '1px solid gold';
+    toastMsg.style.fontFamily = "'Inter', sans-serif";
+    document.body.appendChild(toastMsg);
+    gsap.fromTo(toastMsg, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, onComplete: () => {
+      setTimeout(() => {
+        gsap.to(toastMsg, { opacity: 0, y: 20, duration: 0.6, onComplete: () => toastMsg.remove() });
+      }, 2500);
+    }});
+  });
+  
+  // Additional interactive text: random floating "15" message on card title click
+  const headingName = document.querySelector('.shivadath-name');
+  headingName.addEventListener('click', () => {
+    canvasConfetti({ particleCount: 100, spread: 60, origin: { x: 0.5, y: 0.5 }, startVelocity: 15, colors: ['#ffaa55', '#ff5e00'] });
+    gsap.to('.age-glow', { scale: 1.3, duration: 0.3, yoyo: true, repeat: 1, ease: "power2" });
+  });
+  
+  // Age number 15 interactive jiggle when clicked
+  const ageSpan = document.querySelector('.age-glow');
+  ageSpan.addEventListener('click', () => {
+    canvasConfetti({ particleCount: 80, spread: 45, origin: { y: 0.6, x: 0.5 }, startVelocity: 20 });
+    gsap.to(ageSpan, { rotation: '10deg', duration: 0.2, repeat: 3, yoyo: true, ease: "power1" });
+  });
+  
+  // create a few custom balloon message for the 15th year: flying candle effect? but all cool
+  // we also make the message box background interactive hover effect
+  const msgBox = document.querySelector('.message-box');
+  msgBox.addEventListener('mouseenter', () => {
+    gsap.to(msgBox, { scale: 1.01, backgroundColor: 'rgba(255, 245, 220, 0.85)', duration: 0.3 });
+  });
+  msgBox.addEventListener('mouseleave', () => {
+    gsap.to(msgBox, { scale: 1, backgroundColor: 'rgba(255, 235, 205, 0.6)', duration: 0.3 });
+  });
+  
+  // preload win: dynamic "15 years" generator
+  const footer = document.querySelector('footer');
+  const currentYear = new Date().getFullYear();
+  // optional: just add friend detail.
+  console.log("Shivadath is 15 today — best friend celebration mode ON 🎂");
+  
+  // Additional floating heart particles after load just for flair
+  setInterval(() => {
+    if (Math.random() > 0.7) {
+      canvasConfetti({ particleCount: 15, spread: 27, origin: { y: 0.9, x: Math.random() }, startVelocity: 8, colors: ['#ff99cc', '#ff3366'] });
+    }
+  }, 2200);
+  
+  // Also responsive tilt adjust - mouse move out of card fine, and avoid overflow on mobile
+  if (window.matchMedia("(max-width: 780px)").matches) {
+    card.style.transform = 'none';
+    card.removeEventListener('mousemove', () => {});
+    card.style.transition = 'transform 0.2s';
+  }
+  
+  // Display Birthday message in console for fun.
+  console.log("%c🔥 HAPPY BIRTHDAY SHIVADATH! 15 YEARS OF AWESOMENESS 🔥", "color: #ffaa44; font-size: 16px; font-weight: bold;");
+  console.log("%c✨ Made with love from your closest best friend ✨", "color: #ff884d; font-size: 14px;");
+</script>
+<script>
+  // ... your existing GSAP/confetti code ...
+  
+  // Add this at the bottom of your script
+  document.addEventListener('click', function() {
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen();
+    } else if (docEl.webkitRequestFullscreen) {
+      docEl.webkitRequestFullscreen();
+    } else if (docEl.msRequestFullscreen) {
+      docEl.msRequestFullscreen();
+    }
+  });
+</script>
+</body>
+</html>
